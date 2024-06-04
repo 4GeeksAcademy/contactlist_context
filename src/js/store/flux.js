@@ -12,10 +12,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			],
+			apiContact: "https://playground.4geeks.com/contact/",
+			agenda: "agenda",
+			contacts: [],
+			
 		},
 		actions: {
-			// Use getActions to call a function within a fuction
+			//Función Get para traer los contactos
+			getContacts: async () => {
+				const uri = getStore().apiContact + "agendas/" + getStore().agenda + "/contacts";
+				const response = await fetch(uri); 
+				if (!response.ok) {
+					console.log ("error", response.status, response.statusText);
+					return
+
+				}
+
+				const data = await response.json()
+				setStore({constacts: data.contacts}) 
+
+			},
+
+			
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
