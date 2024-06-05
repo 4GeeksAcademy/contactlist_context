@@ -14,27 +14,43 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			],
 			apiContact: "https://playground.4geeks.com/contact/",
-			agenda: "agenda",
+			nombreAgenda: "Luisa",
 			contacts: [],
 			
 		},
 		actions: {
-			//Función Get para traer los contactos
+			// Función GET para traer los contactos
 			getContacts: async () => {
-				const uri = getStore().apiContact + "agendas/" + getStore().agenda + "/contacts";
+				const uri = getStore().apiContact + "agendas/" + getStore().nombreAgenda + "/contacts";
 				const response = await fetch(uri); 
 				if (!response.ok) {
 					console.log ("error", response.status, response.statusText);
 					return
-
 				}
 
 				const data = await response.json()
-				setStore({constacts: data.contacts}) 
-
+				setStore({constacts: data.contacts}); 
 			},
 
-			
+			// Función POST para añadir contactos
+			addContact: async (dataToSend) => {
+				const uri = getStore().apiContact + "agendas/" + getStore().nombreAgenda + "/contacts";
+				const opctions = {
+					method: "POST",
+					headers:{
+						"Content-type":"application/json"
+					},
+					body: JSON.stringify(dataToSend)
+				}
+
+				const response = await fetch(uri, opctions); 
+				if (!response.ok) {
+					console.log ("error", response.status, response.statusText);
+					return
+				}
+					getActions().getContacts();
+			},
+
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
