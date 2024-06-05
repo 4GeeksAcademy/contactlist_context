@@ -13,44 +13,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 					initial: "white"
 				}
 			],
-			apiContact: "https://playground.4geeks.com/contact/",
-			nombreAgenda: "Luisa",
-			contacts: [],
-			
+
+			sampleContacts: [
+				{
+					name: "Ana Figueroa",
+					email: "ana@email.com",
+					phone: "5555-5555",
+					address: "Nosara, Guanacaste",
+				}
+
+			],
+
+			newContacts: [],
 		},
 		actions: {
-			// Función GET para traer los contactos
-			getContacts: async () => {
-				const uri = getStore().apiContact + "agendas/" + getStore().nombreAgenda + "/contacts";
-				const response = await fetch(uri); 
-				if (!response.ok) {
-					console.log ("error", response.status, response.statusText);
-					return
-				}
-
-				const data = await response.json()
-				setStore({constacts: data.contacts}); 
-			},
-
-			// Función POST para añadir contactos
-			addContact: async (dataToSend) => {
-				const uri = getStore().apiContact + "agendas/" + getStore().nombreAgenda + "/contacts";
-				const opctions = {
-					method: "POST",
-					headers:{
-						"Content-type":"application/json"
-					},
-					body: JSON.stringify(dataToSend)
-				}
-
-				const response = await fetch(uri, opctions); 
-				if (!response.ok) {
-					console.log ("error", response.status, response.statusText);
-					return
-				}
-					getActions().getContacts();
-			},
-
+			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
@@ -72,6 +49,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
+			},
+
+			addNewContact: (newItem) =>{
+				const store = getStore();
+				setStore({newContacts: [newItem, ...store.newContacts]})
+				localStorage.setItem("contacts", JSON.stringify(store.newContacts))
 			}
 		}
 	};
